@@ -1,37 +1,32 @@
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel, validator
-from typing import List
+from pydantic import BaseModel, constr
 import uvicorn
 from src.inference import InferencePipeline
 from src.logger import setup_logger
 
 logger = setup_logger(__name__)
-app = FastAPI(title="Fraud Detection API")
+app = FastAPI(title="Email Fraud Detection API")
 
 # Initialize pipeline
 pipeline = InferencePipeline()
 
 class PredictionRequest(BaseModel):
-    features: List[float]
-
-    @validator('features')
-    def check_feature_length(cls, v):
-        if len(v) != 30:
-            raise ValueError('Features list must contain exactly 30 values.')
-        return v
+    subject: str
+    body: str
 
 class PredictionResponse(BaseModel):
     fraud_probability: float
     prediction: int
+    explanation: dict
 
 @app.post("/predict", response_model=PredictionResponse)
 async def predict(request: PredictionRequest):
     """
-    Predicts fraud for a single transaction.
+    Predicts if an email is phishing/fraudulent.
     """
     logger.info("Received prediction request.")
     try:
-        result = pipeline.predict(request.features)
+        result = pipeline.predict(request.subject, request.body)
         return result
     except Exception as e:
         logger.error(f"Prediction error: {str(e)}")

@@ -11,7 +11,7 @@ def test_inference_pipeline_load():
     # If assets exist, they should be loaded
     if os.path.exists(MODEL_SAVE_PATH) and os.path.exists(SCALER_SAVE_PATH):
         assert pipeline.model is not None
-        assert pipeline.scaler is not None
+        assert pipeline.vectorizer is not None
 
 def test_prediction_logic():
     # Mock prediction if assets don't exist, or skip
@@ -19,11 +19,10 @@ def test_prediction_logic():
         pytest.skip("Model not trained yet.")
     
     pipeline = InferencePipeline()
-    # 30 features
-    dummy_input = [0.0] * 30
-    dummy_input[28] = 100.0 # Amount
+    dummy_subject = "Win a free iPhone!"
+    dummy_body = "Click the link below to claim your prize."
     
-    result = pipeline.predict(dummy_input)
+    result = pipeline.predict(dummy_subject, dummy_body)
     assert "fraud_probability" in result
     assert "prediction" in result
     assert result["prediction"] in [0, 1]

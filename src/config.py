@@ -13,7 +13,7 @@ MODELS_DIR.mkdir(exist_ok=True)
 LOGS_DIR.mkdir(exist_ok=True)
 
 # Data Paths
-RAW_DATA_PATH = DATA_DIR / "creditcard_sample.csv"
+RAW_DATA_PATH = DATA_DIR / "emails_sample.csv"
 PROCESSED_DATA_PATH = DATA_DIR / "processed_data.joblib"
 
 # Model Paths

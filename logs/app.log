@@ -61,3 +61,43 @@
 2026-05-01 19:52:57,969 - src.inference - INFO - Prediction made: 1 (Prob: 0.8542)
 2026-05-01 19:53:06,092 - __main__ - INFO - Received prediction request.
 2026-05-01 19:53:06,113 - src.inference - INFO - Prediction made: 1 (Prob: 0.8473)
+2026-05-01 20:18:36,838 - TrainingPipeline - INFO - Raw data not found. Generating synthetic dataset...
+2026-05-01 20:18:37,219 - src.data_loader - INFO - Loading data from D:\Projects\Fraud Detection System\data\emails_sample.csv
+2026-05-01 20:18:37,313 - src.data_loader - INFO - Schema validation passed.
+2026-05-01 20:18:37,313 - src.data_loader - INFO - Data loaded and validated successfully.
+2026-05-01 20:18:37,313 - src.preprocessing - INFO - Starting NLP preprocessing pipeline.
+2026-05-01 20:18:37,314 - src.preprocessing - INFO - Combining Subject and Body into single text feature.
+2026-05-01 20:18:37,387 - src.preprocessing - INFO - Applying TF-IDF Vectorizer.
+2026-05-01 20:18:38,135 - src.preprocessing - INFO - TF-IDF Vectorizer saved to D:\Projects\Fraud Detection System\models\scaler.joblib
+2026-05-01 20:18:38,135 - src.preprocessing - INFO - Applying SMOTE to handle class imbalance on training data.
+2026-05-01 20:18:38,662 - src.preprocessing - INFO - Original training shape: (16000, 1003)
+2026-05-01 20:18:38,662 - src.preprocessing - INFO - Resampled training shape: (25582, 1003)
+2026-05-01 20:18:38,673 - src.preprocessing - INFO - Processed data saved to D:\Projects\Fraud Detection System\data\processed_data.joblib
+2026-05-01 20:18:38,674 - src.model_training - INFO - Loading processed text data.
+2026-05-01 20:18:38,698 - src.model_training - INFO - Training LogisticRegression with Grid Search...
+2026-05-01 20:18:44,759 - src.model_training - INFO - LogisticRegression -> F1: 1.0000, Precision: 1.0000, Recall: 1.0000, ROC-AUC: 1.0000
+2026-05-01 20:18:44,759 - src.model_training - INFO - Training MultinomialNB with Grid Search...
+2026-05-01 20:18:48,144 - src.model_training - INFO - MultinomialNB -> F1: 1.0000, Precision: 1.0000, Recall: 1.0000, ROC-AUC: 1.0000
+2026-05-01 20:18:48,144 - src.model_training - INFO - Training LinearSVC with Grid Search...
+2026-05-01 20:18:48,519 - src.model_training - INFO - LinearSVC -> F1: 1.0000, Precision: 1.0000, Recall: 1.0000, ROC-AUC: 1.0000
+2026-05-01 20:18:48,519 - src.model_training - INFO - Best Model: LogisticRegression with F1-score: 1.0000
+2026-05-01 20:18:48,520 - src.model_training - INFO - Best model saved to D:\Projects\Fraud Detection System\models\best_model.joblib
+2026-05-01 20:18:48,521 - TrainingPipeline - INFO - Pipeline completed successfully.
+2026-05-01 20:19:35,167 - src.data_loader - ERROR - File not found: invalid_path.csv
+2026-05-01 20:19:35,176 - src.data_loader - INFO - Loading data from test_invalid.csv
+2026-05-01 20:19:35,191 - src.data_loader - ERROR - Error loading data: Missing required columns: ['Body', 'Class']
+2026-05-01 20:19:35,220 - src.inference - INFO - Loading model and vectorizer for inference.
+2026-05-01 20:19:36,294 - src.inference - INFO - Inference assets loaded successfully.
+2026-05-01 20:19:36,295 - src.inference - INFO - Loading model and vectorizer for inference.
+2026-05-01 20:19:36,299 - src.inference - INFO - Inference assets loaded successfully.
+2026-05-01 20:19:36,300 - src.inference - INFO - Prediction made: 1 (Prob: 0.9879)
+2026-05-01 20:20:35,891 - src.inference - INFO - Loading model and vectorizer for inference.
+2026-05-01 20:20:37,224 - src.inference - INFO - Inference assets loaded successfully.
+2026-05-01 20:20:59,944 - __main__ - INFO - Received prediction request.
+2026-05-01 20:20:59,948 - src.inference - INFO - Prediction made: 1 (Prob: 0.9905)
+2026-05-01 20:21:26,471 - __main__ - INFO - Received prediction request.
+2026-05-01 20:21:26,473 - src.inference - INFO - Prediction made: 0 (Prob: 0.3710)
+2026-05-01 20:21:27,341 - __main__ - INFO - Received prediction request.
+2026-05-01 20:21:27,343 - src.inference - INFO - Prediction made: 0 (Prob: 0.3710)
+2026-05-01 20:21:39,056 - __main__ - INFO - Received prediction request.
+2026-05-01 20:21:39,057 - src.inference - INFO - Prediction made: 0 (Prob: 0.3710)

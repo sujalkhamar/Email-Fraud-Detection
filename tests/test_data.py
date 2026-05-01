@@ -12,7 +12,7 @@ def test_data_loader_file_not_found():
 
 def test_data_loader_schema_validation():
     # Create a dummy df with missing columns
-    df = pd.DataFrame({"V1": [1, 2], "Amount": [10.0, 20.0]})
+    df = pd.DataFrame({"V1": [1, 2], "Subject": ["Test", "Test2"]})
     df.to_csv("test_invalid.csv", index=False)
     
     loader = DataLoader("test_invalid.csv")
@@ -29,4 +29,5 @@ def test_synthetic_data_generation():
     df = pd.read_csv(RAW_DATA_PATH)
     assert len(df) == 100
     assert "Class" in df.columns
-    assert "Amount" in df.columns
+    assert "Subject" in df.columns
+    assert "Body" in df.columns

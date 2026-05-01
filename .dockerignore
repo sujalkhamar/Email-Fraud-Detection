@@ -1,0 +1,14 @@
+.venv
+__pycache__
+*.pyc
+logs/*
+.pytest_cache
+.git
+.gitignore
+.dockerignore
+Dockerfile.*
+docker-compose.yml
+# Exclude model artifacts and data from context if they are large, 
+# but for now we mount them, so we shouldn't copy them into the image.
+data/*
+models/*

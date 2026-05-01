@@ -1,7 +1,7 @@
 import pandas as pd
 import joblib
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
+from sklearn.feature_extraction.text import TfidfVectorizer
 from imblearn.over_sampling import SMOTE
 from src.config import RANDOM_STATE, TEST_SIZE, SCALER_SAVE_PATH, PROCESSED_DATA_PATH
 from src.logger import setup_logger
@@ -10,49 +10,50 @@ logger = setup_logger(__name__)
 
 class DataPreprocessor:
     def __init__(self):
-        self.scaler = StandardScaler()
+        # We will repurpose SCALER_SAVE_PATH to save the TF-IDF Vectorizer
+        self.vectorizer = TfidfVectorizer(max_features=5000, stop_words='english')
 
     def preprocess(self, df):
         """
-        Handles missing values, normalizes 'Amount', and splits data.
+        Combines Subject and Body, applies TF-IDF, and splits data.
         """
-        logger.info("Starting preprocessing pipeline.")
+        logger.info("Starting NLP preprocessing pipeline.")
         
         # 1. Handle missing values
-        if df.isnull().values.any():
-            logger.info("Missing values detected. Filling with median.")
-            df = df.fillna(df.median())
+        df = df.fillna("")
         
-        # 2. Normalize 'Amount'
-        # We fit the scaler on the whole dataset here for the pipeline, 
-        # but in strict practice, we should fit on train and transform test.
-        # However, for the initial step, we'll scale 'Amount'.
-        logger.info("Scaling 'Amount' column.")
-        df['Amount'] = self.scaler.fit_transform(df[['Amount']])
+        # 2. Combine text
+        logger.info("Combining Subject and Body into single text feature.")
+        df['text'] = df['Subject'] + " " + df['Body']
         
-        # Save scaler for inference
-        joblib.dump(self.scaler, SCALER_SAVE_PATH)
-        logger.info(f"Scaler saved to {SCALER_SAVE_PATH}")
-
-        # 3. Split data
-        X = df.drop("Class", axis=1)
-        y = df["Class"]
+        # 3. Split data before vectorization to avoid data leakage
+        X_raw = df['text']
+        y = df['Class']
         
-        X_train, X_test, y_train, y_test = train_test_split(
-            X, y, test_size=TEST_SIZE, random_state=RANDOM_STATE, stratify=y
+        X_train_raw, X_test_raw, y_train, y_test = train_test_split(
+            X_raw, y, test_size=TEST_SIZE, random_state=RANDOM_STATE, stratify=y
         )
         
-        # 4. Handle Class Imbalance with SMOTE (ONLY on training data)
+        # 4. Apply TF-IDF Vectorization
+        logger.info("Applying TF-IDF Vectorizer.")
+        X_train_vec = self.vectorizer.fit_transform(X_train_raw)
+        X_test_vec = self.vectorizer.transform(X_test_raw)
+        
+        # Save vectorizer for inference
+        joblib.dump(self.vectorizer, SCALER_SAVE_PATH)
+        logger.info(f"TF-IDF Vectorizer saved to {SCALER_SAVE_PATH}")
+
+        # 5. Handle Class Imbalance with SMOTE (ONLY on training data)
         logger.info("Applying SMOTE to handle class imbalance on training data.")
         smote = SMOTE(random_state=RANDOM_STATE)
-        X_train_res, y_train_res = smote.fit_resample(X_train, y_train)
+        X_train_res, y_train_res = smote.fit_resample(X_train_vec, y_train)
         
-        logger.info(f"Original training shape: {X_train.shape}")
+        logger.info(f"Original training shape: {X_train_vec.shape}")
         logger.info(f"Resampled training shape: {X_train_res.shape}")
 
         processed_data = {
             "X_train": X_train_res,
-            "X_test": X_test,
+            "X_test": X_test_vec,
             "y_train": y_train_res,
             "y_test": y_test
         }

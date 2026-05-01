@@ -1,8 +1,7 @@
 import joblib
-import pandas as pd
 from sklearn.linear_model import LogisticRegression
-from sklearn.ensemble import RandomForestClassifier
-from xgboost import XGBClassifier
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.svm import LinearSVC
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import f1_score, precision_score, recall_score, roc_auc_score
 from src.config import RANDOM_STATE, CV_FOLDS, MODEL_SAVE_PATH, PROCESSED_DATA_PATH
@@ -17,13 +16,13 @@ class ModelTrainer:
                 "model": LogisticRegression(random_state=RANDOM_STATE, max_iter=1000),
                 "params": {"C": [0.1, 1, 10]}
             },
-            "RandomForest": {
-                "model": RandomForestClassifier(random_state=RANDOM_STATE),
-                "params": {"n_estimators": [100, 200], "max_depth": [5, 10]}
+            "MultinomialNB": {
+                "model": MultinomialNB(),
+                "params": {"alpha": [0.1, 1.0, 10.0]}
             },
-            "XGBoost": {
-                "model": XGBClassifier(random_state=RANDOM_STATE, use_label_encoder=False, eval_metric='logloss'),
-                "params": {"n_estimators": [100, 200], "learning_rate": [0.01, 0.1]}
+            "LinearSVC": {
+                "model": LinearSVC(random_state=RANDOM_STATE, max_iter=2000),
+                "params": {"C": [0.1, 1, 10]}
             }
         }
         self.best_model = None
@@ -31,7 +30,7 @@ class ModelTrainer:
 
     def train(self):
         """Trains multiple models and selects the best one based on F1-score."""
-        logger.info("Loading processed data.")
+        logger.info("Loading processed text data.")
         data = joblib.load(PROCESSED_DATA_PATH)
         X_train, y_train = data["X_train"], data["y_train"]
         X_test, y_test = data["X_test"], data["y_test"]
@@ -56,7 +55,12 @@ class ModelTrainer:
             f1 = f1_score(y_test, y_pred)
             precision = precision_score(y_test, y_pred)
             recall = recall_score(y_test, y_pred)
-            roc_auc = roc_auc_score(y_test, model.predict_proba(X_test)[:, 1])
+            
+            # LinearSVC doesn't have predict_proba by default
+            if hasattr(model, "predict_proba"):
+                roc_auc = roc_auc_score(y_test, model.predict_proba(X_test)[:, 1])
+            else:
+                roc_auc = roc_auc_score(y_test, model.decision_function(X_test))
             
             logger.info(f"{name} -> F1: {f1:.4f}, Precision: {precision:.4f}, Recall: {recall:.4f}, ROC-AUC: {roc_auc:.4f}")
             

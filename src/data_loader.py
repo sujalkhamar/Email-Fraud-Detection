@@ -26,8 +26,8 @@ class DataLoader:
 
     def _validate_schema(self, df):
         """Validates that the required columns are present."""
-        # Standard columns for the Kaggle Credit Card dataset or synthetic equivalent
-        required_columns = ["Amount", "Class"]
+        # Standard columns for the Email Spam dataset
+        required_columns = ["Subject", "Body", "Class"]
         missing_cols = [col for col in required_columns if col not in df.columns]
         
         if missing_cols:
