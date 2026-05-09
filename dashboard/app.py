@@ -6,7 +6,7 @@ import seaborn as sns
 import os
 
 # Get API URL from environment variable, fallback to localhost
-API_URL = os.getenv("API_URL", "http://localhost:8000")
+API_URL = os.getenv("API_URL", "http://localhost:8002")
 
 st.set_page_config(page_title="Email Fraud Guard", layout="wide")
 

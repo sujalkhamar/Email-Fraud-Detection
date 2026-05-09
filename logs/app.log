@@ -101,3 +101,17 @@
 2026-05-01 20:21:27,343 - src.inference - INFO - Prediction made: 0 (Prob: 0.3710)
 2026-05-01 20:21:39,056 - __main__ - INFO - Received prediction request.
 2026-05-01 20:21:39,057 - src.inference - INFO - Prediction made: 0 (Prob: 0.3710)
+2026-05-09 13:29:17,109 - src.inference - INFO - Loading model and vectorizer for inference.
+2026-05-09 13:29:36,947 - src.inference - INFO - Inference assets loaded successfully.
+2026-05-09 13:30:40,981 - src.inference - INFO - Loading model and vectorizer for inference.
+2026-05-09 13:30:44,436 - src.inference - INFO - Inference assets loaded successfully.
+2026-05-09 13:31:02,566 - src.inference - INFO - Loading model and vectorizer for inference.
+2026-05-09 13:31:05,392 - src.inference - INFO - Inference assets loaded successfully.
+2026-05-09 13:33:29,421 - src.inference - INFO - Loading model and vectorizer for inference.
+2026-05-09 13:33:32,395 - src.inference - INFO - Inference assets loaded successfully.
+2026-05-09 13:33:41,747 - __main__ - INFO - Received prediction request.
+2026-05-09 13:33:41,752 - src.inference - INFO - Prediction made: 1 (Prob: 0.9905)
+2026-05-09 13:34:26,121 - __main__ - INFO - Received prediction request.
+2026-05-09 13:34:26,127 - src.inference - INFO - Prediction made: 1 (Prob: 0.6021)
+2026-05-09 13:34:35,346 - __main__ - INFO - Received prediction request.
+2026-05-09 13:34:35,350 - src.inference - INFO - Prediction made: 1 (Prob: 0.6021)
